@@ -47,3 +47,21 @@ file 'app/views/layouts/main.html.erb',
 file 'public/stylesheets/style.css',
 %q{
 }
+route "map.root :controller => 'main'"
+run "git init"
+run "git add ."
+run "touch README"
+# Setup decent default gitignores
+run "touch tmp/.gitignore log/.gitignore vendor/.gitignore"
+  run %{find . -type d -empty | grep -v "vendor" | grep -v ".git" | grep -v "tmp" | xargs -I xxx touch xxx/.gitignore}
+  file '.gitignore', <<-END
+.DS_Store
+log/*.log
+tmp/**/*
+config/database.yml
+db/*.sqlite3
+END
+run "git commit -m 'baseline'"
+repo_field = ask("repo name?")
+run "git remote add origin https://peytonmcnully@github.com/peytonmcnully/" + repo_field + ".git"
+run "git push -u origin master"
